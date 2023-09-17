@@ -26,9 +26,9 @@ export function DropzoneInput({
     >
       <Group
         position="center"
-        spacing="xl"
-        className="grid text-center gap-0"
-        style={{ minHeight: rem(140), pointerEvents: 'none' }}
+        spacing="xs"
+        className="grid text-center -mt-16 text-slate-700"
+        style={{ minHeight: rem(120), pointerEvents: 'none' }}
       >
         <Dropzone.Accept>
           <IconUpload
