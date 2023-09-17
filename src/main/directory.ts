@@ -2,7 +2,7 @@ import os from 'os'
 import path from 'path'
 import fs from 'fs'
 
-const FOLDER_UNZIP = '/submissions'
+const FOLDER_UNZIP = 'submissions'
 
 const getDesktopPath = () => path.join(os.homedir(), 'Desktop')
 
@@ -16,18 +16,21 @@ const getTargetPath = (addOptionalFolder: boolean) => {
 const createFolder = (folderPath: string) => {
   try {
     fs.mkdirSync(folderPath, { recursive: true })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    console.error(`Error creating folder '${folderPath}': ${error.message}`)
+  } catch (error) {
+    console.error(`Error creating folder '${folderPath}': ${error}`)
   }
 }
 
 const deleteFolder = (folderPath: string) => {
   try {
     fs.rmdirSync(folderPath, { recursive: true })
-  } catch (err) {
-    console.error(`Error deleting folder "${folderPath}":`, err)
+  } catch (error) {
+    console.error(`Error deleting folder "${folderPath}":`, error)
   }
+}
+
+const generateQuotePath = (pathFolder: string) => {
+  return '"' + pathFolder.replace(/\\/g, '\\\\') + '"'
 }
 
 type GetFullPathUnzipFolderArg = {
@@ -39,10 +42,22 @@ const getFullPathUnzipFolder = ({
   folderName,
   targetPath
 }: GetFullPathUnzipFolderArg) => {
-  const fullPath = path.join(targetPath, `/`, folderName)
-  const quotedPath = '"' + fullPath.replace(/\\/g, '\\\\') + '"'
+  const fullPath = path.join(targetPath, folderName)
+  const quotedPath = generateQuotePath(fullPath)
 
   return quotedPath
 }
 
-export { getTargetPath, createFolder, deleteFolder, getFullPathUnzipFolder }
+const checkContainPackageJson = (pathFolder: string) => {
+  const fullPath = path.join(pathFolder.replace(/"/g, ''), 'package.json')
+  return fs.existsSync(fullPath)
+}
+
+export {
+  getTargetPath,
+  createFolder,
+  deleteFolder,
+  generateQuotePath,
+  getFullPathUnzipFolder,
+  checkContainPackageJson
+}

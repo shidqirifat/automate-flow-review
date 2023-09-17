@@ -7,11 +7,11 @@ function App() {
   }
 
   const handleRejectFile = (file: FileRejection) => {
-    console.log('Rejected: ', file.errors)
+    console.error('Rejected: ', file.errors)
   }
 
   return (
-    <div className="p-10 space-y-5">
+    <div className="p-4">
       <DropzoneInput
         onDrop={handleDropFile}
         onReject={handleRejectFile}

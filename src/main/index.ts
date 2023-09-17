@@ -2,19 +2,19 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { spawn } from 'child_process'
 import uncompress from './uncompress'
-
-function openInVSCode(path: string) {
-  spawn('code', [path], { shell: true })
-}
+import { openVSCode, openTerminal } from './program'
+import { checkContainPackageJson } from './directory'
 
 const openUnzipFileInVSCode = (
   _event: Electron.IpcMainInvokeEvent,
   path: string
 ) => {
   const uncompressPath = uncompress(path)
-  openInVSCode(uncompressPath)
+
+  const isContainPackageJson = checkContainPackageJson(uncompressPath)
+  if (isContainPackageJson) openTerminal(uncompressPath)
+  openVSCode(uncompressPath)
 }
 
 function createWindow(): void {

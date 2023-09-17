@@ -1,5 +1,5 @@
 import { Group, Text, useMantineTheme, rem } from '@mantine/core'
-import { IconUpload, IconPhoto, IconX } from '@tabler/icons-react'
+import { IconUpload, IconX, IconFileCode } from '@tabler/icons-react'
 import { Dropzone, FileRejection, FileWithPath } from '@mantine/dropzone'
 
 type DropzoneInputProps = {
@@ -22,14 +22,17 @@ export function DropzoneInput({
       }}
       maxSize={maxFileInMB * 1024 ** 2}
       accept={['zip']}
+      className="h-[calc(100vh-32px)] grid items-center"
     >
       <Group
         position="center"
         spacing="xl"
-        style={{ minHeight: rem(220), pointerEvents: 'none' }}
+        className="grid text-center gap-0"
+        style={{ minHeight: rem(140), pointerEvents: 'none' }}
       >
         <Dropzone.Accept>
           <IconUpload
+            className="mx-auto block"
             size="3.2rem"
             stroke={1.5}
             color={
@@ -41,23 +44,19 @@ export function DropzoneInput({
         </Dropzone.Accept>
         <Dropzone.Reject>
           <IconX
+            className="mx-auto block"
             size="3.2rem"
             stroke={1.5}
             color={theme.colors.red[theme.colorScheme === 'dark' ? 4 : 6]}
           />
         </Dropzone.Reject>
         <Dropzone.Idle>
-          <IconPhoto size="3.2rem" stroke={1.5} />
+          <IconFileCode className="mx-auto block" size="3.2rem" stroke={1.5} />
         </Dropzone.Idle>
 
-        <div>
-          <Text size="xl" inline>
-            Drag images here or click to select files
-          </Text>
-          <Text size="sm" color="dimmed" inline mt={7}>
-            Attach as many files as you like, each file should not exceed 5mb
-          </Text>
-        </div>
+        <Text size="xl" inline>
+          Drag zip file here or click to select files
+        </Text>
       </Group>
     </Dropzone>
   )

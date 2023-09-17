@@ -4,6 +4,7 @@ import AdmZip from 'adm-zip'
 import {
   createFolder,
   deleteFolder,
+  generateQuotePath,
   getFullPathUnzipFolder,
   getTargetPath
 } from './directory'
@@ -26,10 +27,9 @@ const zipContainsMultipleFolders = (zipEntries: Array<ZipEntries>) => {
 const folderContainsMultipleItems = (directoryPath: string) => {
   try {
     const items = fs.readdirSync(directoryPath)
-    console.log(items)
     return items.length > 1
-  } catch (err) {
-    console.error(`Error reading directory "${directoryPath}":`, err)
+  } catch (error) {
+    console.error(`Error reading directory "${directoryPath}":`, error)
     return false
   }
 }
@@ -54,7 +54,7 @@ const uncompress = (pathFile: string) => {
     isZipContainMultiFolder ? '' : folderName
   )
   const isFolderContainMultiFolders = folderContainsMultipleItems(folderPath)
-  if (isFolderContainMultiFolders) return folderPath
+  if (isFolderContainMultiFolders) return generateQuotePath(folderPath)
 
   const fullPath = getFullPathUnzipFolder({ folderName, targetPath })
   return fullPath
