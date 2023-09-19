@@ -6,8 +6,10 @@ const FOLDER_UNZIP = 'submissions'
 
 const getDesktopPath = () => path.join(os.homedir(), 'Desktop')
 
+const getSubmissionPath = () => path.join(getDesktopPath(), FOLDER_UNZIP)
+
 const getTargetPath = (addOptionalFolder: boolean) => {
-  const fullPath = path.join(getDesktopPath(), FOLDER_UNZIP)
+  const fullPath = getSubmissionPath()
   if (!addOptionalFolder) return fullPath
 
   return path.join(fullPath, `/${+new Date()}`)
@@ -24,6 +26,7 @@ const createFolder = (folderPath: string) => {
 const deleteFolder = (folderPath: string) => {
   try {
     fs.rmdirSync(folderPath, { recursive: true })
+    console.log('Deleted')
   } catch (error) {
     console.error(`Error deleting folder "${folderPath}":`, error)
   }
@@ -54,6 +57,7 @@ const checkContainPackageJson = (pathFolder: string) => {
 }
 
 export {
+  getSubmissionPath,
   getTargetPath,
   createFolder,
   deleteFolder,

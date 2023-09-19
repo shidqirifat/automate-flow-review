@@ -4,7 +4,11 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import uncompress from './uncompress'
 import { openVSCode, openTerminal } from './program'
-import { checkContainPackageJson } from './directory'
+import {
+  getSubmissionPath,
+  checkContainPackageJson,
+  deleteFolder
+} from './directory'
 
 const openUnzipFileInVSCode = (
   _event: Electron.IpcMainInvokeEvent,
@@ -31,8 +35,15 @@ function createWindow(): void {
     }
   })
 
+  mainWindow.setAlwaysOnTop(true, 'screen-saver')
+
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+  })
+
+  // delete folder before close the app
+  mainWindow.on('close', () => {
+    deleteFolder(getSubmissionPath())
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
