@@ -9,6 +9,9 @@ import {
   checkContainPackageJson,
   deleteFolder
 } from './directory'
+import fs from 'fs'
+import os from 'os'
+import path from 'path'
 
 const openUnzipFileInVSCode = (
   _event: Electron.IpcMainInvokeEvent,
@@ -19,6 +22,30 @@ const openUnzipFileInVSCode = (
   const isContainPackageJson = checkContainPackageJson(uncompressPath)
   if (isContainPackageJson) openTerminal(uncompressPath)
   openVSCode(uncompressPath)
+}
+
+const watchDownloadsFolder = (_event: Electron.IpcMainInvokeEvent) => {
+  const downloadFolderPath = path.join(os.homedir(), 'Downloads')
+
+  const watcher = fs.watch(downloadFolderPath, (eventType, fileName) => {
+    if (eventType === 'rename' && fileName && fileName.includes('.zip')) {
+      const pathFile = path.join(downloadFolderPath, fileName || '')
+
+      fs.stat(pathFile, (error, stats) => {
+        if (error) return
+
+        const ONE_MEGA_BYTE = 1024 ** 2
+        const maxSizeInMB = 10 * ONE_MEGA_BYTE
+        if (stats.size > maxSizeInMB) return
+
+        openUnzipFileInVSCode(_event, pathFile)
+      })
+    }
+  })
+
+  watcher.on('error', (error) => {
+    console.error(`Watcher error: ${error}`)
+  })
 }
 
 function createWindow(): void {
@@ -37,8 +64,11 @@ function createWindow(): void {
 
   mainWindow.setAlwaysOnTop(true, 'screen-saver')
 
-  mainWindow.on('ready-to-show', () => {
+  mainWindow.on('ready-to-show', (_event: Electron.IpcMainInvokeEvent) => {
     mainWindow.show()
+
+    // watch downloads folder
+    watchDownloadsFolder(_event)
   })
 
   // delete folder before close the app
