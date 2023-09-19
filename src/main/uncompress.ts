@@ -37,9 +37,7 @@ const folderContainsMultipleItems = (directoryPath: string) => {
 const uncompress = (pathFile: string) => {
   const zip = new AdmZip(pathFile)
 
-  const isZipContainMultiFolder = zipContainsMultipleFolders(zip.getEntries())
-  const targetPath = getTargetPath(isZipContainMultiFolder)
-
+  const targetPath = getTargetPath()
   if (!fs.existsSync(targetPath)) createFolder(targetPath)
   zip.extractAllTo(targetPath, true)
 
@@ -49,15 +47,18 @@ const uncompress = (pathFile: string) => {
   const { entryName } = zip.getEntries()[0]
   const folderName = entryName.split('/')[0]
 
+  // handle zip contain "/__MACOSX" folder
+  const isZipContainMultiFolder = zipContainsMultipleFolders(zip.getEntries())
   const folderPath = path.join(
     targetPath,
     isZipContainMultiFolder ? '' : folderName
   )
+
+  // handle zip contain all file without parent folder
   const isFolderContainMultiFolders = folderContainsMultipleItems(folderPath)
   if (isFolderContainMultiFolders) return generateQuotePath(folderPath)
 
-  const fullPath = getFullPathUnzipFolder({ folderName, targetPath })
-  return fullPath
+  return getFullPathUnzipFolder({ folderName, targetPath })
 }
 
 export default uncompress
