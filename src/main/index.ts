@@ -22,13 +22,8 @@ function createWindow(): void {
   mainWindow.on('ready-to-show', (_event: Electron.IpcMainInvokeEvent) => {
     mainWindow.show()
 
-    // watch downloads folder
-    watchDownloadsFolder(_event)
-  })
-
-  // delete folder before close the app
-  mainWindow.on('close', () => {
     deleteFolder(getSubmissionPath())
+    watchDownloadsFolder(_event)
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
