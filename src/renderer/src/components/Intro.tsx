@@ -1,3 +1,5 @@
+import DevelopedBy from './DevelopedBy'
+
 type IntroProps = { hidden: boolean }
 
 export default function Intro({ hidden }: IntroProps) {
@@ -13,6 +15,7 @@ export default function Intro({ hidden }: IntroProps) {
       <h4 className="text-slate-300 font-normal text-base">
         Ignore the repetitive workflows
       </h4>
+      <DevelopedBy />
     </div>
   )
 }

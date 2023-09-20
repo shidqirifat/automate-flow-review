@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import Container from './components/Container'
-import DevelopedBy from './components/DevelopedBy'
 import Intro from './components/Intro'
 import WatchTo from './components/WatchTo'
 
@@ -10,7 +9,7 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       setHidden(true)
-    }, 3000)
+    }, 5000)
   }, [])
 
   return (
@@ -18,7 +17,6 @@ function App() {
       <Intro hidden={hidden} />
       <Container>
         <WatchTo />
-        <DevelopedBy />
       </Container>
     </>
   )

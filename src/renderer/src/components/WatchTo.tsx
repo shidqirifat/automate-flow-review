@@ -1,6 +1,6 @@
 export default function WatchTo() {
   return (
-    <div className="grid place-content-center h-full text-center gap-3 -mt-8">
+    <div className="grid place-content-center h-full text-center gap-3">
       <h1 className="font-bold text-2xl text-slate-700">
         Watch to Download Folder 👀
       </h1>
