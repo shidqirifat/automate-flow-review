@@ -1,13 +1,26 @@
+import { useEffect, useState } from 'react'
 import Container from './components/Container'
 import DevelopedBy from './components/DevelopedBy'
+import Intro from './components/Intro'
 import WatchTo from './components/WatchTo'
 
 function App() {
+  const [hidden, setHidden] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setHidden(true)
+    }, 3000)
+  }, [])
+
   return (
-    <Container>
-      <WatchTo />
-      <DevelopedBy />
-    </Container>
+    <>
+      <Intro hidden={hidden} />
+      <Container>
+        <WatchTo />
+        <DevelopedBy />
+      </Container>
+    </>
   )
 }
 
