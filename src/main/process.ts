@@ -20,7 +20,7 @@ const openUnzipFileInVSCode = (
 const watchDownloadsFolder = (_event: Electron.IpcMainInvokeEvent) => {
   const downloadFolderPath = path.join(os.homedir(), 'Downloads')
 
-  const watcher = fs.watch(downloadFolderPath, (eventType, fileName) => {
+  fs.watch(downloadFolderPath, (eventType, fileName) => {
     if (eventType === 'rename' && fileName && fileName.includes('.zip')) {
       const pathFile = path.join(downloadFolderPath, fileName || '')
 
@@ -34,10 +34,6 @@ const watchDownloadsFolder = (_event: Electron.IpcMainInvokeEvent) => {
         openUnzipFileInVSCode(_event, pathFile)
       })
     }
-  })
-
-  watcher.on('error', (error) => {
-    console.error(`Watcher error: ${error}`)
   })
 }
 

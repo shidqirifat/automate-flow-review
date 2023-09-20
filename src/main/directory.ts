@@ -21,11 +21,11 @@ const createFolder = (folderPath: string) => {
 }
 
 const deleteFolder = (folderPath: string) => {
-  try {
-    fs.rmdirSync(folderPath, { recursive: true })
-  } catch (error) {
-    console.error(`Error deleting folder "${folderPath}":`, error)
-  }
+  fs.rmdir(folderPath, { recursive: true }, (err) => {
+    if (err) {
+      console.error(`Error deleting folder: ${err}`)
+    }
+  })
 }
 
 const generateQuotePath = (pathFolder: string) => {
