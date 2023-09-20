@@ -2,51 +2,8 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import uncompress from './uncompress'
-import { openVSCode, openTerminal } from './program'
-import {
-  getSubmissionPath,
-  checkContainPackageJson,
-  deleteFolder
-} from './directory'
-import fs from 'fs'
-import os from 'os'
-import path from 'path'
-
-const openUnzipFileInVSCode = (
-  _event: Electron.IpcMainInvokeEvent,
-  path: string
-) => {
-  const uncompressPath = uncompress(path)
-
-  const isContainPackageJson = checkContainPackageJson(uncompressPath)
-  if (isContainPackageJson) openTerminal(uncompressPath)
-  openVSCode(uncompressPath)
-}
-
-const watchDownloadsFolder = (_event: Electron.IpcMainInvokeEvent) => {
-  const downloadFolderPath = path.join(os.homedir(), 'Downloads')
-
-  const watcher = fs.watch(downloadFolderPath, (eventType, fileName) => {
-    if (eventType === 'rename' && fileName && fileName.includes('.zip')) {
-      const pathFile = path.join(downloadFolderPath, fileName || '')
-
-      fs.stat(pathFile, (error, stats) => {
-        if (error) return
-
-        const ONE_MEGA_BYTE = 1024 ** 2
-        const maxSizeInMB = 10 * ONE_MEGA_BYTE
-        if (stats.size > maxSizeInMB) return
-
-        openUnzipFileInVSCode(_event, pathFile)
-      })
-    }
-  })
-
-  watcher.on('error', (error) => {
-    console.error(`Watcher error: ${error}`)
-  })
-}
+import { getSubmissionPath, deleteFolder } from './directory'
+import { openUnzipFileInVSCode, watchDownloadsFolder } from './process'
 
 function createWindow(): void {
   // Create the browser window.
