@@ -1,16 +1,10 @@
-import { useEffect, useState } from 'react'
 import Container from './components/Container'
 import Intro from './components/Intro'
 import WatchTo from './components/WatchTo'
+import useDelay from './hooks/useDelay'
 
 function App() {
-  const [hidden, setHidden] = useState(false)
-
-  useEffect(() => {
-    setTimeout(() => {
-      setHidden(true)
-    }, 5000)
-  }, [])
+  const [hidden] = useDelay(3000)
 
   return (
     <>
