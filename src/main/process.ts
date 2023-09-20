@@ -28,7 +28,7 @@ const watchDownloadsFolder = (_event: Electron.IpcMainInvokeEvent) => {
         if (error) return
 
         const ONE_MEGA_BYTE = 1024 ** 2
-        const maxSizeInMB = 10 * ONE_MEGA_BYTE
+        const maxSizeInMB = 40 * ONE_MEGA_BYTE
         if (stats.size > maxSizeInMB) return
 
         openUnzipFileInVSCode(_event, pathFile)
